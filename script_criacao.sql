@@ -42,19 +42,49 @@ create table ingresso (
     foreign key (cod_sala) references sala (cod_sala)
 );
 
+/*adicionando a tabela genero - 1:n com tabela filme*/
+create table genero (
+	cod_genero int not null unique auto_increment primary key,
+    descricao varchar(45) not null
+);
+
+/*alteracao na organizacao de tabelas*/
+/*removendo o atributo genero dentro da tabela filme*/
+alter table filme drop genero;
+
+/*adicionando a coluna genero na tabela filme que eh foreign key da nova tabela genero*/
+alter table filme add column cod_genero int not null;
+alter table filme add foreign key (cod_genero) references genero (cod_genero);
+
+
 
 /*Comandos DML - Data Manipulation Language*/
 
 /*insercao de dados*/
-insert into sala (capacidade) values (50),(100),(100),(120),(120),(150),(150);
-select * from sala;
 
+insert into sala (capacidade) values (50),(100),(100),(120),(120),(150),(150);
+
+/*dados inseridos antes de separar genero em uma entidade*/
 insert into filme (titulo, genero, duracao) values ('filme A', 'comedia', '1:30');
 insert into filme (titulo, genero, duracao) values ('filme B', 'drama', '1:32');
 insert into filme (titulo, genero, duracao) values ('filme C', 'açao', '2:00');
-select * from filme;
 
-insert into sessao (cod_sessao, hora, qt_ingressos, cod_sala, cod_filme) values (01, '10:30', );
+/*dados inseridos apos criacao de entidade genero para normalizacao*/
+insert into filme (titulo, duracao, cod_genero) values ('filme D', '2:09', 4);
+
+insert into genero (descricao) values ('ação'), ('comedia'), ('drama'), ('aventura');
+
+/*atualizando dados para inserir cod_genero - estrangeira*/
+update filme set cod_genero = 2 where cod_filme = 1;
+update filme set cod_genero = 3 where cod_filme = 2;
+update filme set cod_genero = 1 where cod_filme = 3;
+
+insert into sessao (cod_sessao, hora, qt_ingressos, cod_sala, cod_filme) values (01, '10:30', 50, 1, 1);
 
 insert into ingresso (tipo, preco, cod_sessao, cod_filme, cod_sala) values ();
 
+/*selecao de todos dados da tabela*/
+select * from sala;
+select * from filme;
+select * from genero;
+select * from sessao;
