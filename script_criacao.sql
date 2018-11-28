@@ -138,6 +138,26 @@ update sessao set qt_ingressos = qt_ingressos - 1 where cod_sessao = 3 ;
 update sessao set qt_ingressos = qt_ingressos - 1 where cod_sessao = 4 ;
 
 
+-- Comando IN e BETWEEN
+select * from sala where capacidade in (50, 120); 
+select * from filme where cod_genero in (1, 4);
+select * from sessao where hora between '10:00' AND '20:00';
+select * from ingresso where cod_sala between 2 AND 5;
+
+
+-- Comando ORDER BY e GROUP BY
+select * from sessao order by cod_sala;
+select * from ingresso order by cod_filme;
+select qt_ingressos count(*) from sessao group by qt_ingressos;
+
+-- Comandos de AGREGAÇÃO
+select count(*) from filme;
+select qt_ingressos count(*) from sessao group by qt_ingressos;
+select sum(capacidade) from sala;
+select qt_ingressos avg(*) from sessao;
+select max(qt_ingressos) from sessao;
+select min(capacidade) from sala;
+
 
 /*selecao de todos dados da tabela*/
 select * from sala;
@@ -152,4 +172,14 @@ select ingresso.cod_ingresso as codigo_ingresso, filme.titulo as filme, genero.d
 inner join filme on filme.cod_filme = ingresso.cod_filme
 inner join genero on genero.cod_genero = filme.cod_genero
 inner join sessao on sessao.cod_sessao = ingresso.cod_sessao
-inner join tipo_ingresso on tipo_ingresso.cod_tipo_ingresso = ingresso.cod_tipo_ingresso;    
+inner join tipo_ingresso on tipo_ingresso.cod_tipo_ingresso = ingresso.cod_tipo_ingresso;   
+
+select ingresso.cod_tipo_ingresso as tipo_ingresso, tipo_ingresso.preco as preco_ingressos from tipo_ingresso 
+cross join ingresso;
+
+select sessao.*,filme.* from sessao left join filme on sessao.cod_filme = filme.cod_filme;
+
+select ingresso.*, tipo_ingresso.* 
+from ingresso right join tipo_ingresso on ingresso.cod_tipo_ingresso = tipo_ingresso.cod_tipo_ingresso;
+
+select ingresso.*, sessao.* from ingresso full join sessao on ingresso.cod_filme = sessao.cod_filme;
